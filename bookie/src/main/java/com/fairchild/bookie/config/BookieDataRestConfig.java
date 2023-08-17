@@ -1,6 +1,7 @@
 package com.fairchild.bookie.config;
 
 import com.fairchild.bookie.entity.Book;
+import com.fairchild.bookie.entity.Review;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
@@ -20,8 +21,10 @@ public class BookieDataRestConfig implements RepositoryRestConfigurer {
                 HttpMethod.DELETE};
 
         config.exposeIdsFor(Book.class);
+        config.exposeIdsFor(Review.class);
 
         disableHttpMethods(Book.class, config, unsupportedActions);
+        disableHttpMethods(Review.class, config, unsupportedActions);
 
         // configure cors mapping
         cors.addMapping(config.getBasePath() + "/**")
@@ -31,9 +34,9 @@ public class BookieDataRestConfig implements RepositoryRestConfigurer {
     private void disableHttpMethods(Class theClass, RepositoryRestConfiguration config, HttpMethod[] unsupportedActions) {
         config.getExposureConfiguration()
                 .forDomainType(theClass)
-                .withItemExposure((metdata, httpMethods) ->
+                .withItemExposure((metadata, httpMethods) ->
                         httpMethods.disable(unsupportedActions))
-                .withCollectionExposure((metdata, httpMethods) ->
+                .withCollectionExposure((metadata, httpMethods) ->
                         httpMethods.disable(unsupportedActions));
 
     }
